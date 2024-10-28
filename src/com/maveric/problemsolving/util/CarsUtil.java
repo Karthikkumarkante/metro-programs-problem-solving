@@ -1,6 +1,6 @@
 package com.maveric.problemsolving.util;
 
-import com.maveric.problemsolving.findBestCar.Car;
+import com.maveric.problemsolving.findsuitablecar.Car;
 
 import java.util.ArrayList;
 import java.util.List;

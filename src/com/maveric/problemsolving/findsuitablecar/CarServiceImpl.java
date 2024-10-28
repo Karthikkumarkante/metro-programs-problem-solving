@@ -1,4 +1,4 @@
-package com.maveric.problemsolving.findBestCar;
+package com.maveric.problemsolving.findsuitablecar;
 
 import com.maveric.problemsolving.util.CarsUtil;
 
