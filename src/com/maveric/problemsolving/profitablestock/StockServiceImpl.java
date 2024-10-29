@@ -1,41 +1,50 @@
 package com.maveric.problemsolving.profitablestock;
 
+import com.maveric.problemsolving.util.StocksUtil;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 public class StockServiceImpl implements IstockService{
 
     /**
-     * Finds the maximum profitable stock to buy and sell from an array of stock prices.
+     * Finds the stock with the maximum profit from a list of stocks.
      *
-     * This method iterates through the array of stock prices, tracking the lowest price
-     * encountered so far (best stock to buy) and calculating the maximum profit possible
-     * by selling at the current price. The result is returned as a map containing the best
-     * stock price to buy and the maximum profit achievable.
+     * This method sorts the provided list of stocks based on their expected profit
+     * (calculated as Total Expected Profit per Month minus Total Value)
+     * in descending order and returns the stock with the highest profit.
      *
-     * @param stocks an array of integers representing the stock prices over time.
-     * @return a map with the key being the best stock price to buy and the value being the maximum profit.
+     * @param stocks a list of Stock objects to evaluate.
+     * @return the Stock object that has the maximum profit.
      *
-     *  Best case scenario time complexity : O(n)
-     *  Worst case scenario time complexity : O(n)
-     *  Average case scenario time complexity : O(n)
+     * @throws NoSuchElementException if the list of stocks is empty.
      *
-     *  Auxialary space Complexity : O(1)
+     *  Best Case Scenario Time Complexity : O(nlogn)
+     *  Worst Case Scenario Time Complexity : O(nlogn)
+     *  Average Case Scenario Time Complexity : O(nlogn)
+     *
+     *  Auxialary Space Complexity : O(n)
      *
      */
 
 
+
+
     @Override
-    public Map<Integer, Integer> findMaxProfitableStockToBuyAndSell(int[] stocks) {
-        int maxProfit=0,bestStockToBuy=stocks[0];
-        Map<Integer,Integer> map=new HashMap<>();
-        for (int i=1;i<stocks.length;i++){
-            if (stocks[i]>bestStockToBuy){
-                maxProfit=((stocks[i]-bestStockToBuy)>maxProfit?(stocks[i]-bestStockToBuy):maxProfit);
-            }
-            bestStockToBuy=(bestStockToBuy<stocks[i]?bestStockToBuy:stocks[i]);
+    public Stock findMaxProfitableStockToSell(List<Stock> stocks) {
+        if (stocks == null || stocks.isEmpty()) {
+            throw new NoSuchElementException("The list of stocks is empty.");
         }
-        map.put(bestStockToBuy,maxProfit);
-        return map;
+
+        Stock stock = stocks.stream().sorted((s1, s2) -> {
+                    double stock1Profit = s1.getTotalExpectedProfitPerMonth() - s1.getTotalValue();
+                    double stock2Profit = s2.getTotalExpectedProfitPerMonth() - s2.getTotalValue();
+                    return (int) (stock2Profit - stock1Profit);
+                }).collect(Collectors.toList())
+                .get(0);
+        return stock;
     }
 }
